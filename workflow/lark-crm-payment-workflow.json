@@ -1,0 +1,451 @@
+{
+  "name": "Lark CRM - Course Payment Automation",
+  "nodes": [
+    {
+      "id": "node-01-webhook",
+      "name": "Webhook - Form Registration",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "course-registration",
+        "responseMode": "responseNode",
+        "options": { "allowedOrigins": "*" }
+      },
+      "webhookId": "course-registration-webhook"
+    },
+    {
+      "id": "node-02-respond",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [460, 140],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"success\": true, \"message\": \"Dang ky thanh cong!\" }",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" },
+              { "name": "Content-Type", "value": "application/json" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "node-03-set-normalize",
+      "name": "Set - Normalize + Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300],
+      "parameters": {
+        "mode": "manual",
+        "fields": {
+          "values": [
+            { "name": "contactName",      "type": "string", "value": "={{ $json.body.name }}" },
+            { "name": "contactEmail",     "type": "string", "value": "={{ $json.body.email }}" },
+            { "name": "contactPhone",     "type": "string", "value": "={{ $json.body.phone }}" },
+            { "name": "courseName",       "type": "string", "value": "={{ $json.body.course }}" },
+            { "name": "coursePrice",      "type": "number", "value": "={{ $json.body.price }}" },
+            { "name": "registeredAt",     "type": "string", "value": "={{ $now.toISO() }}" },
+            { "name": "paymentCode",      "type": "string", "value": "={{ $json.body.paymentCode || ('VIG' + $now.format('YYYYMMDDHHmmss') + $json.body.phone.slice(-4)) }}" },
+            { "name": "LARK_APP_ID",      "type": "string", "value": "cli_a958af6c4bf89e18" },
+            { "name": "LARK_APP_SECRET",  "type": "string", "value": "rYvaoByzErm0qkI5xD2DQeJF2NvwwTey" },
+            { "name": "LARK_APP_TOKEN",   "type": "string", "value": "ZpfMbtPOLaRWS9srU3EjOj7kpxd" },
+            { "name": "LARK_TABLE_ID",    "type": "string", "value": "tblmJbEkZ6518VhN" },
+            { "name": "SENDER_EMAIL",     "type": "string", "value": "hello@vigacademy.vn" },
+            { "name": "BANK_CODE",        "type": "string", "value": "MB" },
+            { "name": "BANK_ACCOUNT",     "type": "string", "value": "123456789" },
+            { "name": "BANK_NAME",        "type": "string", "value": "MB Bank" },
+            { "name": "HOTLINE",          "type": "string", "value": "0901234567" },
+            { "name": "COURSE_PORTAL_URL","type": "string", "value": "https://learn.vigacademy.vn" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node-04-get-token",
+      "name": "Get Token - Init",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.larksuite.com/open-apis/auth/v3/tenant_access_token/internal",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Content-Type", "value": "application/json" }]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\"app_id\":\"{{ $json.LARK_APP_ID }}\",\"app_secret\":\"{{ $json.LARK_APP_SECRET }}\"}"
+      }
+    },
+    {
+      "id": "node-05-set-token",
+      "name": "Set - With Token",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [900, 300],
+      "parameters": {
+        "mode": "manual",
+        "fields": {
+          "values": [
+            { "name": "larkToken",        "type": "string", "value": "={{ $json.tenant_access_token }}" },
+            { "name": "contactName",      "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.contactName }}" },
+            { "name": "contactEmail",     "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.contactEmail }}" },
+            { "name": "contactPhone",     "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.contactPhone }}" },
+            { "name": "courseName",       "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.courseName }}" },
+            { "name": "coursePrice",      "type": "number", "value": "={{ $('Set - Normalize + Config').item.json.coursePrice }}" },
+            { "name": "registeredAt",     "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.registeredAt }}" },
+            { "name": "paymentCode",      "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.paymentCode }}" },
+            { "name": "LARK_APP_ID",      "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.LARK_APP_ID }}" },
+            { "name": "LARK_APP_SECRET",  "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.LARK_APP_SECRET }}" },
+            { "name": "LARK_APP_TOKEN",   "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.LARK_APP_TOKEN }}" },
+            { "name": "LARK_TABLE_ID",    "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.LARK_TABLE_ID }}" },
+            { "name": "SENDER_EMAIL",     "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.SENDER_EMAIL }}" },
+            { "name": "BANK_CODE",        "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.BANK_CODE }}" },
+            { "name": "BANK_ACCOUNT",     "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.BANK_ACCOUNT }}" },
+            { "name": "BANK_NAME",        "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.BANK_NAME }}" },
+            { "name": "HOTLINE",          "type": "string", "value": "={{ $('Set - Normalize + Config').item.json.HOTLINE }}" },
+            { "name": "COURSE_PORTAL_URL","type": "string", "value": "={{ $('Set - Normalize + Config').item.json.COURSE_PORTAL_URL }}" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node-06-lark-create",
+      "name": "Lark Base - Create Contact Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://open.larksuite.com/open-apis/bitable/v1/apps/{{ $json.LARK_APP_TOKEN }}/tables/{{ $json.LARK_TABLE_ID }}/records",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type",  "value": "application/json" },
+            { "name": "Authorization", "value": "=Bearer {{ $json.larkToken }}" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\n  \"fields\": {\n    \"Ho va ten\": \"{{ $json.contactName }}\",\n    \"Email\": \"{{ $json.contactEmail }}\",\n    \"So dien thoai\": \"{{ $json.contactPhone }}\",\n    \"Khoa hoc\": \"{{ $json.courseName }}\",\n    \"Gia\": {{ $json.coursePrice }},\n    \"Ma thanh toan\": \"{{ $json.paymentCode }}\",\n    \"Trang thai\": \"Cho thanh toan\",\n    \"Ngay dang ky\": \"{{ $json.registeredAt }}\"\n  }\n}"
+      }
+    },
+    {
+      "id": "node-07-set-record-id",
+      "name": "Set - Store Record ID",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1340, 300],
+      "parameters": {
+        "mode": "manual",
+        "fields": {
+          "values": [
+            { "name": "larkRecordId",     "type": "string", "value": "={{ $json.data.record.record_id }}" },
+            { "name": "larkToken",        "type": "string", "value": "={{ $('Set - With Token').item.json.larkToken }}" },
+            { "name": "contactName",      "type": "string", "value": "={{ $('Set - With Token').item.json.contactName }}" },
+            { "name": "contactEmail",     "type": "string", "value": "={{ $('Set - With Token').item.json.contactEmail }}" },
+            { "name": "contactPhone",     "type": "string", "value": "={{ $('Set - With Token').item.json.contactPhone }}" },
+            { "name": "courseName",       "type": "string", "value": "={{ $('Set - With Token').item.json.courseName }}" },
+            { "name": "coursePrice",      "type": "number", "value": "={{ $('Set - With Token').item.json.coursePrice }}" },
+            { "name": "paymentCode",      "type": "string", "value": "={{ $('Set - With Token').item.json.paymentCode }}" },
+            { "name": "LARK_APP_ID",      "type": "string", "value": "={{ $('Set - With Token').item.json.LARK_APP_ID }}" },
+            { "name": "LARK_APP_SECRET",  "type": "string", "value": "={{ $('Set - With Token').item.json.LARK_APP_SECRET }}" },
+            { "name": "LARK_APP_TOKEN",   "type": "string", "value": "={{ $('Set - With Token').item.json.LARK_APP_TOKEN }}" },
+            { "name": "LARK_TABLE_ID",    "type": "string", "value": "={{ $('Set - With Token').item.json.LARK_TABLE_ID }}" },
+            { "name": "SENDER_EMAIL",     "type": "string", "value": "={{ $('Set - With Token').item.json.SENDER_EMAIL }}" },
+            { "name": "BANK_CODE",        "type": "string", "value": "={{ $('Set - With Token').item.json.BANK_CODE }}" },
+            { "name": "BANK_ACCOUNT",     "type": "string", "value": "={{ $('Set - With Token').item.json.BANK_ACCOUNT }}" },
+            { "name": "BANK_NAME",        "type": "string", "value": "={{ $('Set - With Token').item.json.BANK_NAME }}" },
+            { "name": "HOTLINE",          "type": "string", "value": "={{ $('Set - With Token').item.json.HOTLINE }}" },
+            { "name": "COURSE_PORTAL_URL","type": "string", "value": "={{ $('Set - With Token').item.json.COURSE_PORTAL_URL }}" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node-08-email-qr",
+      "name": "Email - Send QR Payment",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1560, 300],
+      "credentials": {
+        "smtp": { "id": "smtp-credential", "name": "SMTP" }
+      },
+      "parameters": {
+        "fromEmail": "={{ $json.SENDER_EMAIL }}",
+        "toEmail":   "={{ $json.contactEmail }}",
+        "subject":   "=Hoan tat thanh toan khoa hoc {{ $json.courseName }} - VIG Academy",
+        "emailFormat": "html",
+        "message": "=<!DOCTYPE html><html lang=\"vi\"><head><meta charset=\"UTF-8\"></head><body style=\"margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"padding:20px 0;\"><tr><td align=\"center\"><table width=\"600\" cellpadding=\"0\" cellspacing=\"0\"><tr><td style=\"background:linear-gradient(135deg,#e91e8c,#9c27b0);padding:32px;text-align:center;border-radius:16px 16px 0 0;\"><h1 style=\"color:#fff;margin:0;font-size:28px;\">VIG Academy</h1><p style=\"color:rgba(255,255,255,0.88);margin:8px 0 0;\">Xac nhan dang ky khoa hoc</p></td></tr><tr><td style=\"background:#fff;padding:36px;border:1px solid #eee;\"><p>Xin chao <strong style=\"color:#e91e8c;\">{{ $json.contactName }}</strong>,</p><p>Cam on ban da dang ky khoa hoc <strong>{{ $json.courseName }}</strong>!</p><p>Vui long quet ma QR de hoan tat thanh toan:</p><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:20px 0;\"><tr><td style=\"background:linear-gradient(135deg,#fce4ec,#f3e5f5);border:2px solid #e91e8c;border-radius:16px;padding:28px;text-align:center;\"><h3 style=\"color:#c2185b;margin:0 0 16px;\">Quet ma QR de thanh toan</h3><img src=\"https://qr.sepay.vn/{{ $json.BANK_CODE }}/{{ $json.BANK_ACCOUNT }}?amount={{ $json.coursePrice }}&content={{ $json.paymentCode }}\" width=\"200\" height=\"200\" alt=\"QR Thanh toan\" style=\"border-radius:12px;border:4px solid #fff;\" /><table width=\"100%\" style=\"margin-top:20px;\"><tr><td style=\"padding:6px 0;font-size:14px;color:#555;\"><strong>Ngan hang:</strong> {{ $json.BANK_NAME }}</td></tr><tr><td style=\"padding:6px 0;font-size:14px;color:#555;\"><strong>So TK:</strong> {{ $json.BANK_ACCOUNT }}</td></tr><tr><td style=\"padding:6px 0;font-size:14px;color:#555;\"><strong>So tien:</strong> <span style=\"color:#e91e8c;font-weight:700;\">{{ $json.coursePrice }} VND</span></td></tr><tr><td style=\"padding:6px 0;font-size:14px;color:#555;\"><strong>Noi dung CK:</strong> <code style=\"background:#ffe0f0;color:#c2185b;padding:4px 10px;border-radius:6px;font-weight:700;\">{{ $json.paymentCode }}</code></td></tr></table></td></tr></table><p style=\"background:#fff3e0;border-left:4px solid #ff9800;padding:14px 18px;font-size:14px;color:#e65100;\">Vui long thanh toan trong vong <strong>3 ngay</strong> de giu cho hoc.</p><p style=\"font-size:13px;color:#888;margin-top:20px;\">Ho tro: <a href=\"tel:{{ $json.HOTLINE }}\" style=\"color:#e91e8c;\">{{ $json.HOTLINE }}</a></p></td></tr><tr><td style=\"background:#f5f5f5;padding:12px;text-align:center;border-radius:0 0 16px 16px;font-size:12px;color:#aaa;\">© 2025 VIG Academy</td></tr></table></td></tr></table></body></html>"
+      }
+    },
+    {
+      "id": "node-09-wait",
+      "name": "Wait - 3 Days for Payment",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1780, 300],
+      "parameters": {
+        "resume": "timeInterval",
+        "unit": "days",
+        "amount": 3
+      },
+      "webhookId": "wait-3-days-payment-check"
+    },
+    {
+      "id": "node-10-get-token-refresh",
+      "name": "Get Token - Refresh",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.larksuite.com/open-apis/auth/v3/tenant_access_token/internal",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Content-Type", "value": "application/json" }]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\"app_id\":\"{{ $json.LARK_APP_ID }}\",\"app_secret\":\"{{ $json.LARK_APP_SECRET }}\"}"
+      }
+    },
+    {
+      "id": "node-11-set-post-wait",
+      "name": "Set - Post Wait",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2220, 300],
+      "parameters": {
+        "mode": "manual",
+        "fields": {
+          "values": [
+            { "name": "larkToken",        "type": "string", "value": "={{ $json.tenant_access_token }}" },
+            { "name": "larkRecordId",     "type": "string", "value": "={{ $('Set - Store Record ID').item.json.larkRecordId }}" },
+            { "name": "contactName",      "type": "string", "value": "={{ $('Set - Store Record ID').item.json.contactName }}" },
+            { "name": "contactEmail",     "type": "string", "value": "={{ $('Set - Store Record ID').item.json.contactEmail }}" },
+            { "name": "courseName",       "type": "string", "value": "={{ $('Set - Store Record ID').item.json.courseName }}" },
+            { "name": "coursePrice",      "type": "number", "value": "={{ $('Set - Store Record ID').item.json.coursePrice }}" },
+            { "name": "paymentCode",      "type": "string", "value": "={{ $('Set - Store Record ID').item.json.paymentCode }}" },
+            { "name": "LARK_APP_ID",      "type": "string", "value": "={{ $('Set - Store Record ID').item.json.LARK_APP_ID }}" },
+            { "name": "LARK_APP_SECRET",  "type": "string", "value": "={{ $('Set - Store Record ID').item.json.LARK_APP_SECRET }}" },
+            { "name": "LARK_APP_TOKEN",   "type": "string", "value": "={{ $('Set - Store Record ID').item.json.LARK_APP_TOKEN }}" },
+            { "name": "LARK_TABLE_ID",    "type": "string", "value": "={{ $('Set - Store Record ID').item.json.LARK_TABLE_ID }}" },
+            { "name": "SENDER_EMAIL",     "type": "string", "value": "={{ $('Set - Store Record ID').item.json.SENDER_EMAIL }}" },
+            { "name": "BANK_CODE",        "type": "string", "value": "={{ $('Set - Store Record ID').item.json.BANK_CODE }}" },
+            { "name": "BANK_ACCOUNT",     "type": "string", "value": "={{ $('Set - Store Record ID').item.json.BANK_ACCOUNT }}" },
+            { "name": "BANK_NAME",        "type": "string", "value": "={{ $('Set - Store Record ID').item.json.BANK_NAME }}" },
+            { "name": "HOTLINE",          "type": "string", "value": "={{ $('Set - Store Record ID').item.json.HOTLINE }}" },
+            { "name": "COURSE_PORTAL_URL","type": "string", "value": "={{ $('Set - Store Record ID').item.json.COURSE_PORTAL_URL }}" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node-12-lark-get",
+      "name": "Lark Base - Get Payment Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2440, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://open.larksuite.com/open-apis/bitable/v1/apps/{{ $json.LARK_APP_TOKEN }}/tables/{{ $json.LARK_TABLE_ID }}/records/{{ $json.larkRecordId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $json.larkToken }}" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node-13-set-for-emails",
+      "name": "Set - For Emails",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2660, 300],
+      "parameters": {
+        "mode": "manual",
+        "fields": {
+          "values": [
+            { "name": "paymentStatus",    "type": "string", "value": "={{ $json.data.record.fields['Trang thai'] }}" },
+            { "name": "larkRecordId",     "type": "string", "value": "={{ $json.data.record.record_id }}" },
+            { "name": "larkToken",        "type": "string", "value": "={{ $('Set - Post Wait').item.json.larkToken }}" },
+            { "name": "contactName",      "type": "string", "value": "={{ $('Set - Post Wait').item.json.contactName }}" },
+            { "name": "contactEmail",     "type": "string", "value": "={{ $('Set - Post Wait').item.json.contactEmail }}" },
+            { "name": "courseName",       "type": "string", "value": "={{ $('Set - Post Wait').item.json.courseName }}" },
+            { "name": "coursePrice",      "type": "number", "value": "={{ $('Set - Post Wait').item.json.coursePrice }}" },
+            { "name": "paymentCode",      "type": "string", "value": "={{ $('Set - Post Wait').item.json.paymentCode }}" },
+            { "name": "LARK_APP_TOKEN",   "type": "string", "value": "={{ $('Set - Post Wait').item.json.LARK_APP_TOKEN }}" },
+            { "name": "LARK_TABLE_ID",    "type": "string", "value": "={{ $('Set - Post Wait').item.json.LARK_TABLE_ID }}" },
+            { "name": "SENDER_EMAIL",     "type": "string", "value": "={{ $('Set - Post Wait').item.json.SENDER_EMAIL }}" },
+            { "name": "BANK_CODE",        "type": "string", "value": "={{ $('Set - Post Wait').item.json.BANK_CODE }}" },
+            { "name": "BANK_ACCOUNT",     "type": "string", "value": "={{ $('Set - Post Wait').item.json.BANK_ACCOUNT }}" },
+            { "name": "HOTLINE",          "type": "string", "value": "={{ $('Set - Post Wait').item.json.HOTLINE }}" },
+            { "name": "COURSE_PORTAL_URL","type": "string", "value": "={{ $('Set - Post Wait').item.json.COURSE_PORTAL_URL }}" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node-14-if-payment",
+      "name": "IF - Payment Status Check",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2880, 300],
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": false, "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "cond-paid",
+              "leftValue": "={{ $json.paymentStatus }}",
+              "rightValue": "Da thanh toan",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "node-15-email-confirm",
+      "name": "Email - Payment Confirmation",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [3100, 160],
+      "credentials": {
+        "smtp": { "id": "smtp-credential", "name": "SMTP" }
+      },
+      "parameters": {
+        "fromEmail": "={{ $json.SENDER_EMAIL }}",
+        "toEmail":   "={{ $json.contactEmail }}",
+        "subject":   "=Thanh toan thanh cong - Chao mung den {{ $json.courseName }}!",
+        "emailFormat": "html",
+        "message": "=<!DOCTYPE html><html lang=\"vi\"><head><meta charset=\"UTF-8\"></head><body style=\"margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"padding:20px 0;\"><tr><td align=\"center\"><table width=\"600\" cellpadding=\"0\" cellspacing=\"0\"><tr><td style=\"background:linear-gradient(135deg,#43a047,#66bb6a);padding:32px;text-align:center;border-radius:16px 16px 0 0;\"><h1 style=\"color:#fff;margin:0;font-size:26px;\">Thanh toan thanh cong!</h1><p style=\"color:rgba(255,255,255,0.9);margin:8px 0 0;\">Chao mung ban den voi VIG Academy</p></td></tr><tr><td style=\"background:#fff;padding:36px;border:1px solid #eee;\"><p>Xin chao <strong style=\"color:#e91e8c;\">{{ $json.contactName }}</strong>,</p><p>Thanh toan cua ban da duoc xac nhan thanh cong.</p><table width=\"100%\" style=\"border-collapse:collapse;margin:20px 0;border:1px solid #e0e0e0;border-radius:12px;overflow:hidden;\"><tr style=\"background:#f9f0ff;\"><td style=\"padding:14px 18px;font-weight:600;width:40%;\">Khoa hoc</td><td style=\"padding:14px 18px;\">{{ $json.courseName }}</td></tr><tr><td style=\"padding:14px 18px;font-weight:600;border-top:1px solid #eee;\">Ma don hang</td><td style=\"padding:14px 18px;border-top:1px solid #eee;\"><code style=\"background:#ffe0f0;color:#c2185b;padding:3px 8px;border-radius:4px;\">{{ $json.paymentCode }}</code></td></tr><tr style=\"background:#f9f0ff;\"><td style=\"padding:14px 18px;font-weight:600;border-top:1px solid #eee;\">So tien</td><td style=\"padding:14px 18px;font-weight:700;color:#43a047;border-top:1px solid #eee;\">{{ $json.coursePrice }} VND</td></tr></table><div style=\"text-align:center;padding:20px;background:#e8f5e9;border-radius:12px;\"><a href=\"{{ $json.COURSE_PORTAL_URL }}\" style=\"display:inline-block;background:linear-gradient(135deg,#e91e8c,#9c27b0);color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;\">Truy cap khoa hoc</a></div><p style=\"font-size:13px;color:#888;margin-top:20px;\">Ho tro: <a href=\"tel:{{ $json.HOTLINE }}\" style=\"color:#e91e8c;\">{{ $json.HOTLINE }}</a></p></td></tr><tr><td style=\"background:#f5f5f5;padding:12px;text-align:center;border-radius:0 0 16px 16px;font-size:12px;color:#aaa;\">© 2025 VIG Academy</td></tr></table></td></tr></table></body></html>"
+      }
+    },
+    {
+      "id": "node-16-lark-update-paid",
+      "name": "Lark Base - Update Status Paid",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3320, 160],
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://open.larksuite.com/open-apis/bitable/v1/apps/{{ $json.LARK_APP_TOKEN }}/tables/{{ $json.LARK_TABLE_ID }}/records/{{ $json.larkRecordId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type",  "value": "application/json" },
+            { "name": "Authorization", "value": "=Bearer {{ $json.larkToken }}" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\n  \"fields\": {\n    \"Trang thai\": \"Da kich hoat\",\n    \"Segment\": \"Hoc vien active\",\n    \"Ngay kich hoat\": \"{{ $now.toISO() }}\"\n  }\n}"
+      }
+    },
+    {
+      "id": "node-17-email-reminder",
+      "name": "Email - Payment Reminder",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [3100, 440],
+      "credentials": {
+        "smtp": { "id": "smtp-credential", "name": "SMTP" }
+      },
+      "parameters": {
+        "fromEmail": "={{ $json.SENDER_EMAIL }}",
+        "toEmail":   "={{ $json.contactEmail }}",
+        "subject":   "=Nhac nho: Hoan tat thanh toan {{ $json.courseName }} - Suat hoc sap het!",
+        "emailFormat": "html",
+        "message": "=<!DOCTYPE html><html lang=\"vi\"><head><meta charset=\"UTF-8\"></head><body style=\"margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"padding:20px 0;\"><tr><td align=\"center\"><table width=\"600\" cellpadding=\"0\" cellspacing=\"0\"><tr><td style=\"background:linear-gradient(135deg,#ff6b35,#f7c59f);padding:32px;text-align:center;border-radius:16px 16px 0 0;\"><h1 style=\"color:#fff;margin:0;font-size:26px;\">Nhac nho quan trong</h1><p style=\"color:rgba(255,255,255,0.9);margin:8px 0 0;\">VIG Academy</p></td></tr><tr><td style=\"background:#fff;padding:36px;border:1px solid #eee;\"><p>Xin chao <strong style=\"color:#e91e8c;\">{{ $json.contactName }}</strong>,</p><p>Chung toi nhan thay ban chua hoan tat thanh toan cho khoa hoc <strong>{{ $json.courseName }}</strong>.</p><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:20px 0;\"><tr><td style=\"background:linear-gradient(135deg,#fce4ec,#f3e5f5);border:2px solid #e91e8c;border-radius:16px;padding:24px;text-align:center;\"><h3 style=\"color:#c2185b;margin:0 0 14px;\">Quet ma QR thanh toan ngay</h3><img src=\"https://qr.sepay.vn/{{ $json.BANK_CODE }}/{{ $json.BANK_ACCOUNT }}?amount={{ $json.coursePrice }}&content={{ $json.paymentCode }}\" width=\"180\" height=\"180\" alt=\"QR Thanh toan\" style=\"border-radius:10px;border:4px solid #fff;\" /><p style=\"margin:12px 0 0;font-size:14px;color:#555;\">Ma thanh toan: <code style=\"background:#ffe0f0;color:#c2185b;padding:4px 10px;border-radius:6px;font-weight:700;\">{{ $json.paymentCode }}</code></p><p style=\"margin:8px 0 0;font-size:16px;color:#333;\">So tien: <strong style=\"color:#e91e8c;\">{{ $json.coursePrice }} VND</strong></p></td></tr></table><p style=\"font-size:13px;color:#888;\">Ho tro: <a href=\"tel:{{ $json.HOTLINE }}\" style=\"color:#e91e8c;\">{{ $json.HOTLINE }}</a></p></td></tr><tr><td style=\"background:#f5f5f5;padding:12px;text-align:center;border-radius:0 0 16px 16px;font-size:12px;color:#aaa;\">© 2025 VIG Academy</td></tr></table></td></tr></table></body></html>"
+      }
+    },
+    {
+      "id": "node-18-lark-update-reminded",
+      "name": "Lark Base - Update Status Reminded",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3320, 440],
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://open.larksuite.com/open-apis/bitable/v1/apps/{{ $json.LARK_APP_TOKEN }}/tables/{{ $json.LARK_TABLE_ID }}/records/{{ $json.larkRecordId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type",  "value": "application/json" },
+            { "name": "Authorization", "value": "=Bearer {{ $json.larkToken }}" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\n  \"fields\": {\n    \"Trang thai\": \"Da nhac nho\",\n    \"Ngay nhac\": \"{{ $now.toISO() }}\"\n  }\n}"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook - Form Registration": {
+      "main": [[
+        { "node": "Respond to Webhook",        "type": "main", "index": 0 },
+        { "node": "Set - Normalize + Config",  "type": "main", "index": 0 }
+      ]]
+    },
+    "Set - Normalize + Config": {
+      "main": [[{ "node": "Get Token - Init", "type": "main", "index": 0 }]]
+    },
+    "Get Token - Init": {
+      "main": [[{ "node": "Set - With Token", "type": "main", "index": 0 }]]
+    },
+    "Set - With Token": {
+      "main": [[{ "node": "Lark Base - Create Contact Record", "type": "main", "index": 0 }]]
+    },
+    "Lark Base - Create Contact Record": {
+      "main": [[{ "node": "Set - Store Record ID", "type": "main", "index": 0 }]]
+    },
+    "Set - Store Record ID": {
+      "main": [[{ "node": "Email - Send QR Payment", "type": "main", "index": 0 }]]
+    },
+    "Email - Send QR Payment": {
+      "main": [[{ "node": "Wait - 3 Days for Payment", "type": "main", "index": 0 }]]
+    },
+    "Wait - 3 Days for Payment": {
+      "main": [[{ "node": "Get Token - Refresh", "type": "main", "index": 0 }]]
+    },
+    "Get Token - Refresh": {
+      "main": [[{ "node": "Set - Post Wait", "type": "main", "index": 0 }]]
+    },
+    "Set - Post Wait": {
+      "main": [[{ "node": "Lark Base - Get Payment Status", "type": "main", "index": 0 }]]
+    },
+    "Lark Base - Get Payment Status": {
+      "main": [[{ "node": "Set - For Emails", "type": "main", "index": 0 }]]
+    },
+    "Set - For Emails": {
+      "main": [[{ "node": "IF - Payment Status Check", "type": "main", "index": 0 }]]
+    },
+    "IF - Payment Status Check": {
+      "main": [
+        [{ "node": "Email - Payment Confirmation", "type": "main", "index": 0 }],
+        [{ "node": "Email - Payment Reminder",     "type": "main", "index": 0 }]
+      ]
+    },
+    "Email - Payment Confirmation": {
+      "main": [[{ "node": "Lark Base - Update Status Paid", "type": "main", "index": 0 }]]
+    },
+    "Email - Payment Reminder": {
+      "main": [[{ "node": "Lark Base - Update Status Reminded", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1", "saveManualExecutions": true },
+  "tags": [{ "name": "CRM" }, { "name": "Payment" }, { "name": "Lark" }],
+  "pinData": {}
+}

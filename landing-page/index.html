@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VIG Academy - Khoá Học Marketing Online Chuyên Nghiệp | Đăng Ký Ngay</title>
+  <meta name="description" content="Học Marketing Online tại VIG Academy. Khoá học thực chiến, mentor 1:1, cộng đồng 10.000+ học viên. Đăng ký ngay - Ưu đãi có hạn!" />
+  <meta name="keywords" content="học marketing online, khoá học digital marketing, VIG Academy, học content creator" />
+  <meta property="og:title" content="VIG Academy - Khoá Học Marketing Online" />
+  <meta property="og:description" content="Khoá học thực chiến từ chuyên gia hàng đầu. Đăng ký ngay!" />
+  <meta property="og:url" content="https://vigacademy.vn" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #e91e8c;
+      --primary-dark: #c2185b;
+      --primary-light: #fce4ec;
+      --secondary: #9c27b0;
+      --gradient: linear-gradient(135deg, #e91e8c, #9c27b0);
+      --gradient-soft: linear-gradient(135deg, #fce4ec, #f3e5f5);
+      --text-dark: #1a1a2e;
+      --text-gray: #666;
+      --text-light: #999;
+      --white: #ffffff;
+      --bg-light: #f8f9fe;
+      --border: #eee;
+      --shadow: 0 8px 32px rgba(233,30,140,0.12);
+      --shadow-lg: 0 16px 64px rgba(233,30,140,0.18);
+      --radius: 16px;
+      --radius-sm: 8px;
+      --font: 'Be Vietnam Pro', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      color: var(--text-dark);
+      background: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── Popup ─── */
+    #popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    #popup-overlay.active { display: flex; }
+    #popup-box {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 40px 36px;
+      max-width: 460px;
+      width: 100%;
+      position: relative;
+      box-shadow: var(--shadow-lg);
+      animation: popIn .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes popIn { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    #popup-close {
+      position: absolute;
+      top: 16px; right: 20px;
+      background: none; border: none;
+      font-size: 22px; color: var(--text-light);
+      cursor: pointer; line-height: 1;
+    }
+    #popup-close:hover { color: var(--primary); }
+    .popup-badge {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    #popup-box h2 { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; line-height: 1.3; }
+    #popup-box p  { font-size: 14px; color: var(--text-gray); margin-bottom: 20px; }
+    .popup-form { display: flex; gap: 10px; }
+    .popup-form input {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-family: var(--font);
+      font-size: 14px;
+      outline: none;
+    }
+    .popup-form input:focus { border-color: var(--primary); }
+    .popup-form button {
+      background: var(--gradient);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .popup-note { font-size: 11px; color: var(--text-light); margin-top: 10px; text-align: center; }
+
+    /* ─── Header ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(233,30,140,0.08);
+      padding: 0 24px;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: var(--gradient);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      color: white;
+      font-weight: 900;
+    }
+    .logo-text { font-size: 20px; font-weight: 800; color: var(--text-dark); }
+    .logo-text span { color: var(--primary); }
+
+    nav { display: flex; align-items: center; gap: 32px; }
+    nav a {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--primary); }
+    .btn-header {
+      background: var(--gradient);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 10px 22px;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-header:hover { opacity: .9; transform: translateY(-1px); }
+
+    /* ─── Hero ─── */
+    #hero {
+      background: linear-gradient(160deg, #fff 50%, #fce4ec 100%);
+      padding: 80px 24px 100px;
+      overflow: hidden;
+      position: relative;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(233,30,140,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .hero-badge::before { content: ''; }
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--primary); }
+    .hero p {
+      font-size: 17px;
+      color: var(--text-gray);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 28px;
+      margin-bottom: 36px;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .num { font-size: 28px; font-weight: 900; color: var(--primary); line-height: 1; }
+    .hero-stat .lbl { font-size: 12px; color: var(--text-gray); margin-top: 4px; }
+    .btn-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gradient);
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      padding: 16px 36px;
+      font-family: var(--font);
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(233,30,140,0.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-hero:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(233,30,140,0.45); }
+    .hero-visual {
+      background: var(--gradient-soft);
+      border-radius: 24px;
+      padding: 40px;
+      text-align: center;
+      border: 2px solid rgba(233,30,140,0.12);
+      box-shadow: var(--shadow);
+    }
+    .hero-visual h3 { font-size: 20px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+    .hero-visual p  { font-size: 14px; color: var(--text-gray); }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; justify-content: center; }
+    .hero-tag {
+      background: white;
+      border: 1px solid rgba(233,30,140,0.2);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    /* ─── Section commons ─── */
+    section { padding: 80px 24px; }
+    .section-label {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    h2.section-title {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    h2.section-title span { color: var(--primary); }
+    .section-sub {
+      font-size: 16px;
+      color: var(--text-gray);
+      max-width: 560px;
+      margin-bottom: 48px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* ─── Courses ─── */
+    #courses { background: var(--bg-light); }
+    .courses-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .course-card {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s, transform .2s;
+      position: relative;
+    }
+    .course-card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: var(--shadow); }
+    .course-card.selected {
+      border-color: var(--primary);
+      background: var(--gradient-soft);
+      box-shadow: var(--shadow);
+    }
+    .course-card.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 12px; right: 14px;
+      background: var(--primary);
+      color: white;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .course-card h3 { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+    .course-card .course-meta { font-size: 12px; color: var(--text-gray); margin-bottom: 12px; }
+    .course-price { font-size: 22px; font-weight: 900; color: var(--primary); }
+    .course-price .original { font-size: 13px; color: var(--text-light); text-decoration: line-through; font-weight: 400; margin-left: 6px; }
+    .course-duration { font-size: 12px; color: var(--text-gray); margin-top: 4px; }
+
+    /* ─── Benefits ─── */
+    #benefits { background: var(--white); }
+    .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .benefit-card {
+      background: var(--bg-light);
+      border-radius: var(--radius);
+      padding: 28px;
+      border: 1px solid transparent;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .benefit-card:hover { border-color: rgba(233,30,140,0.2); box-shadow: var(--shadow); }
+    .benefit-card h3 { font-size: 17px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+    .benefit-card p  { font-size: 14px; color: var(--text-gray); line-height: 1.65; }
+
+    /* ─── Testimonials ─── */
+    #testimonials { background: linear-gradient(160deg, #fce4ec 0%, #f3e5f5 100%); }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .testimonial-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: 0 4px 20px rgba(233,30,140,0.08);
+    }
+    .testimonial-stars { color: #ffc107; font-size: 18px; margin-bottom: 12px; }
+    .testimonial-card blockquote { font-size: 15px; color: var(--text-gray); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .testimonial-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--gradient);
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .testimonial-name { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+    .testimonial-role { font-size: 12px; color: var(--text-gray); }
+
+    /* ─── Register Form ─── */
+    #register { background: var(--white); }
+    .register-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .register-info h2 { font-size: 36px; font-weight: 900; color: var(--text-dark); margin-bottom: 16px; line-height: 1.2; }
+    .register-info h2 span { color: var(--primary); }
+    .register-info p  { font-size: 16px; color: var(--text-gray); margin-bottom: 28px; }
+    .register-checklist { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .register-checklist li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--text-dark); }
+    .register-checklist li::before { content: '–'; flex-shrink: 0; margin-top: 1px; color: var(--primary); font-weight: 700; }
+
+    .form-card {
+      background: var(--white);
+      border: 2px solid rgba(233,30,140,0.12);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: var(--shadow);
+    }
+    .form-card h3 { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 24px; text-align: center; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+    .form-group label .req { color: var(--primary); }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 13px 16px;
+      font-family: var(--font);
+      font-size: 15px;
+      color: var(--text-dark);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      appearance: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(233,30,140,0.1);
+    }
+    .form-group input.error { border-color: #f44336; }
+    .form-error { font-size: 12px; color: #f44336; margin-top: 4px; display: none; }
+    .form-error.visible { display: block; }
+
+    .select-wrapper { position: relative; }
+    .select-wrapper::after {
+      content: '▼';
+      position: absolute;
+      right: 14px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      color: var(--text-gray);
+      pointer-events: none;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--gradient);
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: var(--font);
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 6px 20px rgba(233,30,140,0.3);
+      transition: transform .2s, box-shadow .2s, opacity .2s;
+    }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(233,30,140,0.4); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .form-note { font-size: 12px; color: var(--text-light); text-align: center; margin-top: 12px; }
+
+    #form-alert {
+      display: none;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    #form-alert.error { background: #fdecea; color: #c62828; border: 1px solid #f44336; display: block; }
+    #form-alert.success { background: #e8f5e9; color: #2e7d32; border: 1px solid #4caf50; display: block; }
+
+    /* ─── QR State ─── */
+    #qr-state { display: none; }
+    .qr-box {
+      background: var(--gradient-soft);
+      border: 2px solid rgba(233,30,140,0.2);
+      border-radius: 20px;
+      padding: 24px 20px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .qr-box h3 { font-size: 16px; font-weight: 800; color: var(--text-dark); margin-bottom: 16px; }
+    .qr-box img { border-radius: 12px; border: 4px solid #fff; box-shadow: var(--shadow); display: block; margin: 0 auto 16px; }
+    .qr-detail-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(233,30,140,0.1); font-size: 13px; }
+    .qr-detail-row:last-child { border-bottom: none; }
+    .qr-detail-row .lbl { color: var(--text-gray); }
+    .qr-detail-row .val { font-weight: 700; color: var(--text-dark); }
+    .qr-detail-row .val.code { background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 5px; font-size: 12px; letter-spacing: 0.5px; }
+    .qr-detail-row .val.amount { color: var(--primary); font-size: 16px; }
+    .payment-status {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; margin-top: 12px;
+    }
+    .payment-status.waiting { background: #fff8e1; color: #f57f17; }
+    .payment-status.verified { background: #e8f5e9; color: #2e7d32; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 15px; height: 15px; border: 2px solid #ffc107; border-top-color: transparent; border-radius: 50%; animation: spin .8s linear infinite; flex-shrink: 0; }
+
+    /* ─── Verified State ─── */
+    #verified-state { display: none; text-align: center; padding: 20px 0; }
+    .verified-check {
+      width: 68px; height: 68px;
+      background: linear-gradient(135deg, #43a047, #66bb6a);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px; font-size: 32px; color: white;
+      box-shadow: 0 8px 24px rgba(67,160,71,0.3);
+    }
+    #verified-state h3 { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; }
+    #verified-state p  { font-size: 14px; color: var(--text-gray); line-height: 1.7; }
+    #verified-state .email-highlight { color: var(--primary); font-weight: 700; }
+
+    /* ─── Dev test button ─── */
+    .btn-test-payment {
+      width: 100%; margin-top: 12px;
+      background: none; border: 1.5px dashed #aaa; border-radius: 8px;
+      padding: 10px; font-family: var(--font); font-size: 12px;
+      color: #999; cursor: pointer; transition: border-color .2s, color .2s;
+    }
+    .btn-test-payment:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* ─── FAQ ─── */
+    #faq { background: var(--bg-light); }
+    .faq-list { max-width: 760px; margin: 0 auto; }
+    .faq-item {
+      background: var(--white);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 20px 24px;
+      text-align: left;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .faq-question:hover { color: var(--primary); }
+    .faq-chevron { font-size: 14px; color: var(--primary); transition: transform .3s; flex-shrink: 0; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease, padding .3s ease;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; }
+    .faq-answer p { padding: 0 24px 20px; font-size: 14px; color: var(--text-gray); line-height: 1.7; }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--text-dark);
+      color: rgba(255,255,255,0.6);
+      padding: 40px 24px;
+      text-align: center;
+    }
+    footer .footer-logo { font-size: 22px; font-weight: 900; color: white; margin-bottom: 8px; }
+    footer .footer-logo span { color: var(--primary); }
+    footer p { font-size: 13px; margin-bottom: 4px; }
+    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    footer a:hover { color: var(--primary); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1024px) {
+      .courses-grid { grid-template-columns: repeat(2, 1fr); }
+      .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .register-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero h1 { font-size: 36px; }
+    }
+    @media (max-width: 640px) {
+      nav { display: none; }
+      .courses-grid { grid-template-columns: 1fr; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      h2.section-title { font-size: 28px; }
+      .hero h1 { font-size: 30px; }
+      .hero-stats { gap: 16px; }
+      .form-card { padding: 24px 20px; }
+      .popup-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Lead Gen Popup ─── -->
+  <div id="popup-overlay" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+    <div id="popup-box">
+      <button id="popup-close" aria-label="Đóng">&times;</button>
+      <div class="popup-badge">Ưu đãi giới hạn</div>
+      <h2 id="popup-title">Nhận tài liệu Marketing miễn phí!</h2>
+      <p>Để lại email để nhận bộ tài liệu Digital Marketing trị giá 500.000đ hoàn toàn miễn phí.</p>
+      <form class="popup-form" id="popup-form">
+        <input type="email" placeholder="Email của bạn" id="popup-email" required autocomplete="email" />
+        <button type="submit">Nhận ngay</button>
+      </form>
+      <p class="popup-note">Chúng tôi tôn trọng sự riêng tư của bạn. Không spam.</p>
+    </div>
+  </div>
+
+  <!-- ─── Header ─── -->
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon">V</div>
+        <span class="logo-text">VIG <span>Academy</span></span>
+      </a>
+      <nav>
+        <a href="#courses">Khoá học</a>
+        <a href="#benefits">Lợi ích</a>
+        <a href="#testimonials">Học viên</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a href="#register" class="btn-header">Đăng ký ngay</a>
+    </div>
+  </header>
+
+  <!-- ─── Hero ─── -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero">
+        <div class="hero-badge">Khoá học #1 Việt Nam 2025</div>
+        <h1>Làm chủ <span>Marketing</span> — Bùng nổ doanh thu</h1>
+        <p>Khoá học thực chiến từ chuyên gia hàng đầu. Học lý thuyết gắn với thực tế, áp dụng ngay ngày đầu tiên.</p>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="num">10K+</div>
+            <div class="lbl">Học viên</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">4.9★</div>
+            <div class="lbl">Đánh giá</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">95%</div>
+            <div class="lbl">Hài lòng</div>
+          </div>
+        </div>
+        <a href="#register" class="btn-hero">Đăng ký học ngay →</a>
+      </div>
+      <div class="hero-visual">
+        <h3>Quy trình học tập</h3>
+        <p>Đăng ký → Thanh toán QR → Học ngay</p>
+        <div class="hero-tags">
+          <span class="hero-tag">Mobile-first</span>
+          <span class="hero-tag">Chứng chỉ</span>
+          <span class="hero-tag">Mentor 1:1</span>
+          <span class="hero-tag">Trọn đời</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Courses ─── -->
+  <section id="courses">
+    <div class="container">
+      <span class="section-label">Khoá học nổi bật</span>
+      <h2 class="section-title">Chọn khoá học <span>phù hợp</span> với bạn</h2>
+      <p class="section-sub">Tất cả khoá học đều có mentor hỗ trợ, tài liệu độc quyền và cộng đồng học viên sôi động.</p>
+      <div class="courses-grid" id="courses-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Benefits ─── -->
+  <section id="benefits">
+    <div class="container">
+      <span class="section-label">Tại sao chọn VIG</span>
+      <h2 class="section-title">Lợi ích <span>vượt trội</span></h2>
+      <p class="section-sub">Chúng tôi không chỉ dạy lý thuyết — chúng tôi đồng hành để bạn thực sự thành công.</p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <h3>Học thực chiến 100%</h3>
+          <p>Mỗi bài học gắn với case study thực tế. Bạn sẽ có portfolio ngay sau khoá học.</p>
+        </div>
+        <div class="benefit-card">
+          <h3>Mentor 1:1 tận tâm</h3>
+          <p>Được hỗ trợ trực tiếp từ chuyên gia với hơn 10 năm kinh nghiệm trong ngành.</p>
+        </div>
+        <div class="benefit-card">
+          <h3>Cộng đồng 10.000+ thành viên</h3>
+          <p>Kết nối với học viên, chia sẻ kinh nghiệm và cơ hội việc làm 24/7.</p>
+        </div>
+        <div class="benefit-card">
+          <h3>Chứng chỉ được công nhận</h3>
+          <p>Chứng chỉ VIG Academy được hàng trăm doanh nghiệp lớn công nhận tại Việt Nam.</p>
+        </div>
+        <div class="benefit-card">
+          <h3>Truy cập trọn đời</h3>
+          <p>Một lần đăng ký, học mãi mãi. Bao gồm tất cả cập nhật nội dung trong tương lai.</p>
+        </div>
+        <div class="benefit-card">
+          <h3>Hoàn tiền 100% sau 7 ngày</h3>
+          <p>Không hài lòng? Chúng tôi hoàn tiền toàn bộ, không hỏi lý do trong 7 ngày đầu.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Testimonials ─── -->
+  <section id="testimonials">
+    <div class="container">
+      <span class="section-label">Học viên nói gì</span>
+      <h2 class="section-title">Hàng nghìn người đã <span>thay đổi</span> sự nghiệp</h2>
+      <p class="section-sub">Đừng chỉ nghe chúng tôi nói — hãy nghe từ chính học viên.</p>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote>"Sau 2 tháng học Digital Marketing tại VIG, tôi tăng traffic website lên 300% và có thêm 5 khách hàng mới mỗi tháng. Đầu tư tốt nhất tôi từng làm!"</blockquote>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">N</div>
+            <div>
+              <div class="testimonial-name">Nguyễn Thanh Hương</div>
+              <div class="testimonial-role">Marketing Manager, HN</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote>"Khoá Content Creator Pro giúp tôi từ 0 lên 50.000 followers Instagram chỉ trong 4 tháng. Mentor hỗ trợ rất nhiệt tình và tận tâm."</blockquote>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">T</div>
+            <div>
+              <div class="testimonial-name">Trần Minh Tuấn</div>
+              <div class="testimonial-role">Content Creator, TP.HCM</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote>"Nhờ khoá Thương Mại Điện Tử, shop của tôi tăng doanh thu 5x chỉ trong 3 tháng đầu. Nội dung thực chiến, áp dụng được ngay!"</blockquote>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">L</div>
+            <div>
+              <div class="testimonial-name">Lê Thị Mai Anh</div>
+              <div class="testimonial-role">Chủ shop Online, Đà Nẵng</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Registration Form ─── -->
+  <section id="register">
+    <div class="container">
+      <div class="register-inner">
+        <div class="register-info">
+          <span class="section-label">Đăng ký ngay</span>
+          <h2>Bắt đầu hành trình <span>bứt phá</span> của bạn</h2>
+          <p>Điền thông tin để đăng ký khoá học. Sau khi đăng ký, bạn sẽ nhận email kèm mã QR để thanh toán nhanh chóng.</p>
+          <ul class="register-checklist">
+            <li>Nhận xác nhận ngay trong vài giây</li>
+            <li>Thanh toán dễ dàng qua mã QR SePay</li>
+            <li>Truy cập khoá học ngay sau khi thanh toán</li>
+            <li>Hỗ trợ 24/7 qua hotline và nhóm cộng đồng</li>
+            <li>Bảo đảm hoàn tiền 100% trong 7 ngày</li>
+          </ul>
+        </div>
+
+        <div class="form-card">
+          <h3>Đăng ký khoá học</h3>
+          <div id="form-alert" role="alert"></div>
+          <form id="register-form" novalidate>
+            <div class="form-group">
+              <label for="f-name">Họ và tên <span class="req">*</span></label>
+              <input type="text" id="f-name" name="name" placeholder="Nguyễn Văn A" autocomplete="name" />
+              <div class="form-error" id="err-name">Vui lòng nhập họ tên hợp lệ (ít nhất 2 ký tự)</div>
+            </div>
+            <div class="form-group">
+              <label for="f-email">Email <span class="req">*</span></label>
+              <input type="email" id="f-email" name="email" placeholder="email@example.com" autocomplete="email" />
+              <div class="form-error" id="err-email">Email không hợp lệ</div>
+            </div>
+            <div class="form-group">
+              <label for="f-phone">Số điện thoại <span class="req">*</span></label>
+              <input type="tel" id="f-phone" name="phone" placeholder="0901234567" autocomplete="tel" />
+              <div class="form-error" id="err-phone">Số điện thoại không hợp lệ (VD: 0901234567)</div>
+            </div>
+            <div class="form-group">
+              <label for="f-course">Khoá học <span class="req">*</span></label>
+              <div class="select-wrapper">
+                <select id="f-course" name="course">
+                  <option value="">— Chọn khoá học —</option>
+                </select>
+              </div>
+              <div class="form-error" id="err-course">Vui lòng chọn khoá học</div>
+            </div>
+            <input type="hidden" id="f-price" name="price" value="0" />
+            <button type="submit" class="btn-submit" id="submit-btn">
+              Đăng ký &amp; Nhận QR thanh toán
+            </button>
+            <p class="form-note">Thông tin của bạn được bảo mật tuyệt đối</p>
+          </form>
+
+          <!-- State 2: QR Payment -->
+          <div id="qr-state">
+            <div class="qr-box">
+              <h3>Quét mã QR để thanh toán</h3>
+              <img id="qr-img" src="" width="200" height="200" alt="QR Thanh toán" />
+              <div class="qr-detail-row">
+                <span class="lbl">Ngân hàng</span>
+                <span class="val" id="qr-bank"></span>
+              </div>
+              <div class="qr-detail-row">
+                <span class="lbl">Số tài khoản</span>
+                <span class="val" id="qr-account"></span>
+              </div>
+              <div class="qr-detail-row">
+                <span class="lbl">Số tiền</span>
+                <span class="val amount" id="qr-amount"></span>
+              </div>
+              <div class="qr-detail-row">
+                <span class="lbl">Nội dung CK</span>
+                <span class="val code" id="qr-code"></span>
+              </div>
+            </div>
+            <div class="payment-status waiting" id="payment-status">
+              <div class="spinner"></div>
+              <span>Đang chờ xác nhận thanh toán...</span>
+            </div>
+            <button class="btn-test-payment" id="btn-simulate" onclick="simulatePayment()">
+              [DEV] Giả lập thanh toán thành công
+            </button>
+          </div>
+
+          <!-- State 3: Payment Verified -->
+          <div id="verified-state">
+            <div class="verified-check">✓</div>
+            <h3>Thanh toán thành công!</h3>
+            <p>Chúng tôi đã xác nhận thanh toán của bạn.<br />Email hướng dẫn truy cập khoá học đã được gửi đến<br /><span class="email-highlight" id="verified-email"></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FAQ ─── -->
+  <section id="faq">
+    <div class="container" style="text-align:center;">
+      <span class="section-label">Giải đáp thắc mắc</span>
+      <h2 class="section-title" style="margin-bottom:8px;">Câu hỏi <span>thường gặp</span></h2>
+      <p class="section-sub" style="margin:0 auto 40px;">Chưa rõ điều gì? Chúng tôi đã tổng hợp những câu hỏi phổ biến nhất.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question">Sau khi đăng ký, tôi sẽ nhận được gì? <span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Ngay sau khi đăng ký thành công, hệ thống sẽ tự động gửi email xác nhận kèm mã QR để thanh toán. Sau khi thanh toán được xác nhận, bạn sẽ nhận thêm email hướng dẫn truy cập khoá học.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Tôi có thể thanh toán bằng hình thức nào? <span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Hiện tại hỗ trợ thanh toán qua mã QR ngân hàng (SePay). Bạn chỉ cần mở app ngân hàng, quét mã QR và chuyển khoản với nội dung đúng như hướng dẫn trong email.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Khoá học có thời hạn truy cập không? <span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Không! Bạn được truy cập khoá học vĩnh viễn (trọn đời). Bao gồm tất cả nội dung được cập nhật thêm trong tương lai mà không mất phí.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Nếu không hài lòng, tôi có được hoàn tiền không? <span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Có! Chúng tôi đảm bảo hoàn tiền 100% trong 7 ngày đầu kể từ khi bạn truy cập khoá học. Không cần giải thích lý do — chỉ cần liên hệ hotline là xong.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Khoá học phù hợp với người chưa có kinh nghiệm không? <span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Hoàn toàn phù hợp! Nội dung được thiết kế từ cơ bản đến nâng cao, dành cho cả người mới bắt đầu lẫn người đã có kinh nghiệm muốn nâng cấp kỹ năng.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─── -->
+  <footer>
+    <div class="footer-logo">VIG <span>Academy</span></div>
+    <p>© 2025 VIG Academy. All rights reserved.</p>
+    <p>Hotline: <a href="tel:0901234567">0901 234 567</a> &nbsp;|&nbsp; Email: <a href="mailto:hello@vigacademy.vn">hello@vigacademy.vn</a></p>
+  </footer>
+
+  <script>
+    // ══════════════════════════════════════════════════
+    // CONFIG — update webhookUrl before deployment
+    // ══════════════════════════════════════════════════
+    const CONFIG = {
+      webhookUrl:          'http://localhost:5678/webhook/course-registration',
+      checkPaymentUrl:     'http://localhost:5678/webhook/check-payment',
+      sepayTestWebhookUrl: 'http://localhost:5678/webhook-test/sepay-payment',
+      bank: {
+        code:    'MB',        // ← update to your bank code
+        account: '123456789', // ← update to your account number
+        name:    'MB Bank'    // ← update to your bank name
+      },
+      courses: [
+        {
+          id: 'digital-marketing',
+          name: 'Digital Marketing Toàn Diện',
+          price: 2990000,
+          originalPrice: 4500000,
+          duration: '3 tháng · 48 bài học'
+        },
+        {
+          id: 'content-creator',
+          name: 'Content Creator Pro',
+          price: 1990000,
+          originalPrice: 3000000,
+          duration: '2 tháng · 32 bài học'
+        },
+        {
+          id: 'social-media',
+          name: 'Social Media Marketing',
+          price: 2490000,
+          originalPrice: 3800000,
+          duration: '2.5 tháng · 40 bài học'
+        },
+        {
+          id: 'ecommerce',
+          name: 'Thương Mại Điện Tử',
+          price: 3490000,
+          originalPrice: 5000000,
+          duration: '4 tháng · 60 bài học'
+        }
+      ]
+    };
+
+    // ── Format VND ──
+    function formatVND(n) {
+      return n.toLocaleString('vi-VN') + ' VNĐ';
+    }
+
+    // ── Render course cards ──
+    function renderCourseCards() {
+      const grid = document.getElementById('courses-grid');
+      grid.innerHTML = CONFIG.courses.map(c => `
+        <div class="course-card" data-id="${c.id}" data-price="${c.price}" data-name="${c.name}" onclick="selectCourseCard(this)">
+          <h3>${c.name}</h3>
+          <p class="course-meta">${c.duration}</p>
+          <div class="course-price">
+            ${formatVND(c.price)}
+            <span class="original">${formatVND(c.originalPrice)}</span>
+          </div>
+          <div class="course-duration" style="margin-top:8px;">
+            <span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:700;padding:3px 8px;border-radius:100px;">
+              Tiết kiệm ${Math.round((1 - c.price/c.originalPrice)*100)}%
+            </span>
+          </div>
+        </div>
+      `).join('');
+
+      // Populate select
+      const sel = document.getElementById('f-course');
+      CONFIG.courses.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.name;
+        opt.dataset.price = c.price;
+        opt.textContent = `${c.name} — ${formatVND(c.price)}`;
+        sel.appendChild(opt);
+      });
+    }
+
+    function selectCourseCard(card) {
+      document.querySelectorAll('.course-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      const courseName = card.dataset.name;
+      const price = card.dataset.price;
+      // Sync select
+      const sel = document.getElementById('f-course');
+      for (let opt of sel.options) {
+        if (opt.value === courseName) { sel.value = courseName; break; }
+      }
+      document.getElementById('f-price').value = price;
+    }
+
+    // Sync select → hidden price + card highlight
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCourseCards();
+
+      document.getElementById('f-course').addEventListener('change', function() {
+        const opt = this.options[this.selectedIndex];
+        const price = opt.dataset.price || 0;
+        document.getElementById('f-price').value = price;
+        // Highlight matching card
+        document.querySelectorAll('.course-card').forEach(c => {
+          c.classList.toggle('selected', c.dataset.name === opt.value);
+        });
+      });
+    });
+
+    // ══════════════════════════════════════════════════
+    // Form validation & submission
+    // ══════════════════════════════════════════════════
+    function showFieldError(id, msg) {
+      const input = document.getElementById('f-' + id);
+      const err   = document.getElementById('err-' + id);
+      if (input) input.classList.add('error');
+      if (err)   { err.textContent = msg || err.textContent; err.classList.add('visible'); }
+    }
+    function clearFieldError(id) {
+      const input = document.getElementById('f-' + id);
+      const err   = document.getElementById('err-' + id);
+      if (input) input.classList.remove('error');
+      if (err)   err.classList.remove('visible');
+    }
+    function showAlert(msg, type) {
+      const el = document.getElementById('form-alert');
+      el.textContent = msg;
+      el.className = type; // 'error' or 'success'
+    }
+    function clearAlert() {
+      const el = document.getElementById('form-alert');
+      el.textContent = '';
+      el.className = '';
+      el.style.display = 'none';
+    }
+
+    document.getElementById('register-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      // Clear errors
+      ['name','email','phone','course'].forEach(clearFieldError);
+      clearAlert();
+
+      const name   = document.getElementById('f-name').value.trim();
+      const email  = document.getElementById('f-email').value.trim();
+      const phone  = document.getElementById('f-phone').value.trim();
+      const course = document.getElementById('f-course').value;
+      const price  = parseInt(document.getElementById('f-price').value, 10) || 0;
+
+      let valid = true;
+
+      if (!name || name.length < 2) {
+        showFieldError('name');
+        valid = false;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showFieldError('email');
+        valid = false;
+      }
+      if (!/^(0|\+84)[3-9][0-9]{8}$/.test(phone.replace(/\s/g,''))) {
+        showFieldError('phone');
+        valid = false;
+      }
+      if (!course) {
+        showFieldError('course');
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Đang xử lý...';
+
+      // Generate payment code client-side (must match n8n logic)
+      const paymentCode = generatePaymentCode(phone);
+
+      try {
+        // Send as URL-encoded to avoid CORS preflight
+        await fetch(CONFIG.webhookUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ name, email, phone, course, price, paymentCode })
+        });
+
+        // Store globally for simulatePayment()
+        _currentPaymentCode = paymentCode;
+        _currentEmail = email;
+
+        // Show QR state
+        showQRState(price, paymentCode);
+        document.getElementById('register-form').style.display = 'none';
+        document.getElementById('qr-state').style.display = 'block';
+        document.getElementById('qr-state').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Start polling for payment confirmation
+        startPaymentPolling(paymentCode, email);
+
+      } catch (err) {
+        showAlert('Có lỗi xảy ra. Vui lòng thử lại hoặc liên hệ hotline 0901 234 567.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Đăng ký & Nhận QR thanh toán';
+      }
+    });
+
+    // ── Generate payment code (mirrors n8n logic) ──
+    function generatePaymentCode(phone) {
+      const d = new Date();
+      const ts = d.getFullYear().toString()
+        + String(d.getMonth()+1).padStart(2,'0')
+        + String(d.getDate()).padStart(2,'0')
+        + String(d.getHours()).padStart(2,'0')
+        + String(d.getMinutes()).padStart(2,'0')
+        + String(d.getSeconds()).padStart(2,'0');
+      return 'VIG' + ts + phone.replace(/\s/g,'').slice(-4);
+    }
+
+    // ── Show QR details ──
+    function showQRState(price, code) {
+      const qrUrl = `https://qr.sepay.vn/${CONFIG.bank.code}/${CONFIG.bank.account}?amount=${price}&content=${code}`;
+      document.getElementById('qr-img').src = qrUrl;
+      document.getElementById('qr-bank').textContent    = CONFIG.bank.name;
+      document.getElementById('qr-account').textContent = CONFIG.bank.account;
+      document.getElementById('qr-amount').textContent  = formatVND(price);
+      document.getElementById('qr-code').textContent    = code;
+    }
+
+    // ── Poll for payment status every 5s ──
+    let _pollTimer = null;
+    let _currentPaymentCode = '';
+    let _currentEmail = '';
+    function startPaymentPolling(code, email) {
+      _pollTimer = setInterval(async () => {
+        try {
+          const res = await fetch(`${CONFIG.checkPaymentUrl}?code=${encodeURIComponent(code)}`);
+          if (!res.ok) return; // n8n not ready yet — keep polling
+          const data = await res.json();
+          if (data.paid === true) {
+            clearInterval(_pollTimer);
+            showVerifiedState(email);
+          }
+        } catch (e) {
+          // Network error or CORS — keep polling silently
+        }
+      }, 5000);
+    }
+
+    // ── Show payment verified state ──
+    function showVerifiedState(email) {
+      clearInterval(_pollTimer);
+      document.getElementById('qr-state').style.display = 'none';
+      document.getElementById('verified-email').textContent = email;
+      document.getElementById('verified-state').style.display = 'block';
+      document.getElementById('verified-state').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // ── [DEV] Simulate SePay payment ──
+    // Requires: open the SePay workflow in n8n → click "Listen for test event" on the Webhook node
+    async function simulatePayment() {
+      const btn = document.getElementById('btn-simulate');
+      btn.disabled = true;
+      btn.textContent = 'Đang gửi...';
+
+      const price = parseInt(document.getElementById('f-price').value, 10) || 0;
+
+      try {
+        // URLSearchParams avoids CORS preflight (simple request)
+        await fetch(CONFIG.sepayTestWebhookUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            id:                  Date.now(),
+            bank_brand_name:     CONFIG.bank.name,
+            account_number:      CONFIG.bank.account,
+            transaction_date:    new Date().toISOString().replace('T', ' ').substring(0, 19),
+            amount_in:           price,
+            amount_out:          0,
+            accumulated:         50000000,
+            transaction_content: _currentPaymentCode,
+            reference_number:    'FT' + Date.now(),
+            code:                _currentPaymentCode,
+            bank_account_id:     1
+          })
+        });
+        btn.textContent = 'Đã gửi — chờ n8n xử lý...';
+      } catch (e) {
+        btn.textContent = '[DEV] Giả lập thanh toán thành công';
+        btn.disabled = false;
+      }
+    }
+
+    // ══════════════════════════════════════════════════
+    // Lead Gen Popup
+    // ══════════════════════════════════════════════════
+    const POPUP_DELAY = 8000;
+
+    setTimeout(() => {
+      if (!sessionStorage.getItem('popup_dismissed')) {
+        document.getElementById('popup-overlay').classList.add('active');
+      }
+    }, POPUP_DELAY);
+
+    function dismissPopup() {
+      document.getElementById('popup-overlay').classList.remove('active');
+      sessionStorage.setItem('popup_dismissed', '1');
+    }
+
+    document.getElementById('popup-close').addEventListener('click', dismissPopup);
+
+    document.getElementById('popup-overlay').addEventListener('click', function(e) {
+      if (e.target === this) dismissPopup();
+    });
+
+    document.getElementById('popup-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('popup-email').value.trim();
+      if (email) {
+        // Optionally send to webhook too
+        dismissPopup();
+        // Prefill main form email
+        document.getElementById('f-email').value = email;
+      }
+    });
+
+    // ══════════════════════════════════════════════════
+    // FAQ Accordion
+    // ══════════════════════════════════════════════════
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const item = this.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        // Toggle current
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>
