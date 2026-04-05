@@ -821,9 +821,6 @@
               <div class="spinner"></div>
               <span>Đang chờ xác nhận thanh toán...</span>
             </div>
-            <button class="btn-test-payment" id="btn-simulate" onclick="simulatePayment()">
-              Giả lập thanh toán (kiểm thử)
-            </button>
           </div>
 
           <!-- State 3: Payment Verified -->
@@ -882,7 +879,6 @@
     const CONFIG = {
       webhookUrl:      'https://dacphu.app.n8n.cloud/webhook/course-registration',
       checkPaymentUrl: 'https://dacphu.app.n8n.cloud/webhook/check-payment',
-      sepayWebhookUrl: 'https://dacphu.app.n8n.cloud/webhook-test/sepay-payment',
       bank: {
         code:    'MB',        // ← update to your bank code
         account: '123456789', // ← update to your account number
@@ -1129,42 +1125,6 @@
       document.getElementById('verified-email').textContent = email;
       document.getElementById('verified-state').style.display = 'block';
       document.getElementById('verified-state').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    // ── Simulate SePay payment (for testing) ──
-    // In n8n: open the SePay workflow → click "Listen for test event" on the Webhook node first
-    async function simulatePayment() {
-      const btn = document.getElementById('btn-simulate');
-      btn.disabled = true;
-      btn.textContent = 'Đang gửi...';
-
-      const price = parseInt(document.getElementById('f-price').value, 10) || 0;
-
-      try {
-        // URLSearchParams avoids CORS preflight (simple request)
-        await fetch(CONFIG.sepayWebhookUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({
-            id:                  Date.now(),
-            bank_brand_name:     CONFIG.bank.name,
-            account_number:      CONFIG.bank.account,
-            transaction_date:    new Date().toISOString().replace('T', ' ').substring(0, 19),
-            amount_in:           price,
-            amount_out:          0,
-            accumulated:         50000000,
-            transaction_content: _currentPaymentCode,
-            reference_number:    'FT' + Date.now(),
-            code:                _currentPaymentCode,
-            bank_account_id:     1
-          })
-        });
-        btn.textContent = 'Đã gửi — chờ n8n xử lý...';
-      } catch (e) {
-        btn.textContent = '[DEV] Giả lập thanh toán thành công';
-        btn.disabled = false;
-      }
     }
 
     // ══════════════════════════════════════════════════
