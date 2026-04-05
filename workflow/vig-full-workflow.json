@@ -128,7 +128,7 @@
         },
         "sendBody": true,
         "contentType": "json",
-        "body": "={\"fields\":{\"Ho va ten\":\"{{ $json.contactName }}\",\"Email\":\"{{ $json.contactEmail }}\",\"So dien thoai\":\"{{ $json.contactPhone }}\",\"Khoa hoc\":\"{{ $json.courseName }}\",\"Gia\":{{ $json.coursePrice }},\"Ma thanh toan\":\"{{ $json.paymentCode }}\",\"Trang thai\":\"Cho thanh toan\",\"Ngay dang ky\":\"{{ $json.registeredAt }}\"}}"
+        "body": "={\"fields\":{\"Họ và tên\":\"{{ $json.contactName }}\",\"Email\":\"{{ $json.contactEmail }}\",\"Số điện thoại\":\"{{ $json.contactPhone }}\",\"Khóa học\":\"{{ $json.courseName }}\",\"Giá\":{{ $json.coursePrice }},\"Mã thanh toán\":\"{{ $json.paymentCode }}\",\"Trạng thái\":[\"Chờ thanh toán\"],\"Ngày đăng ký\":{{ $now.toMillis() }}}}"
       }
     },
     {
@@ -252,7 +252,7 @@
       "parameters": {
         "conditions": {
           "options": { "caseSensitive": false, "typeValidation": "loose" },
-          "conditions": [{ "id": "cond-paid", "leftValue": "={{ $json.data.record.fields['Trang thai'] }}", "rightValue": "Da thanh toan", "operator": { "type": "string", "operation": "equals" } }],
+          "conditions": [{ "id": "cond-paid", "leftValue": "={{ ($json.data.record.fields['Trạng thái'] || [''])[0] }}", "rightValue": "Đã thanh toán", "operator": { "type": "string", "operation": "equals" } }],
           "combinator": "and"
         }
       }
@@ -275,7 +275,7 @@
         },
         "sendBody": true,
         "contentType": "json",
-        "body": "={\"fields\":{\"Trang thai\":\"Da kich hoat\",\"Segment\":\"Hoc vien active\",\"Ngay kich hoat\":\"{{ $now.toISO() }}\"}}"
+        "body": "={\"fields\":{\"Trạng thái\":[\"Đã kích hoạt\"],\"Segment\":\"Học viên active\",\"Ngày kích hoạt\":{{ $now.toMillis() }}}}"
       }
     },
     {
@@ -311,7 +311,7 @@
         },
         "sendBody": true,
         "contentType": "json",
-        "body": "={\"fields\":{\"Trang thai\":\"Da nhac nho\",\"Ngay nhac\":\"{{ $now.toISO() }}\"}}"
+        "body": "={\"fields\":{\"Trạng thái\":[\"Đã nhắc nhở\"],\"Ngày nhắc\":\"{{ $now.toISO() }}\"}}"
       }
     },
     {
@@ -409,7 +409,7 @@
         },
         "sendBody": true,
         "contentType": "json",
-        "body": "={\"filter\":{\"conjunction\":\"and\",\"conditions\":[{\"field_name\":\"Ma thanh toan\",\"operator\":\"contains\",\"value\":[\"{{ $json.paymentCode }}\"]}]},\"page_size\":1}"
+        "body": "={\"filter\":{\"conjunction\":\"and\",\"conditions\":[{\"field_name\":\"Mã thanh toán\",\"operator\":\"contains\",\"value\":[\"{{ $json.paymentCode }}\"]}]},\"page_size\":1}"
       }
     },
     {
@@ -437,10 +437,10 @@
         "fields": {
           "values": [
             { "name": "larkRecordId",     "type": "string", "value": "={{ $json.data.items[0].record_id }}" },
-            { "name": "contactName",      "type": "string", "value": "={{ $json.data.items[0].fields['Ho va ten'] }}" },
+            { "name": "contactName",      "type": "string", "value": "={{ $json.data.items[0].fields['Họ và tên'] }}" },
             { "name": "contactEmail",     "type": "string", "value": "={{ $json.data.items[0].fields['Email'] }}" },
-            { "name": "courseName",       "type": "string", "value": "={{ $json.data.items[0].fields['Khoa hoc'] }}" },
-            { "name": "paymentCode",      "type": "string", "value": "={{ $json.data.items[0].fields['Ma thanh toan'] }}" },
+            { "name": "courseName",       "type": "string", "value": "={{ $json.data.items[0].fields['Khóa học'] }}" },
+            { "name": "paymentCode",      "type": "string", "value": "={{ $json.data.items[0].fields['Mã thanh toán'] }}" },
             { "name": "larkToken",        "type": "string", "value": "={{ $('Set - SePay Token').item.json.larkToken }}" },
             { "name": "LARK_APP_TOKEN",   "type": "string", "value": "={{ $('Set - SePay Token').item.json.LARK_APP_TOKEN }}" },
             { "name": "LARK_TABLE_ID",    "type": "string", "value": "={{ $('Set - SePay Token').item.json.LARK_TABLE_ID }}" },
@@ -471,7 +471,7 @@
         },
         "sendBody": true,
         "contentType": "json",
-        "body": "={\"fields\":{\"Trang thai\":\"Da thanh toan\",\"Segment\":\"Hoc vien active\",\"Ngay kich hoat\":\"{{ $now.toISO() }}\"}}"
+        "body": "={\"fields\":{\"Trạng thái\":[\"Đã thanh toán\"],\"Segment\":\"Học viên active\",\"Ngày kích hoạt\":{{ $now.toMillis() }}}}"
       }
     },
     {
@@ -596,7 +596,7 @@
         },
         "sendBody": true,
         "contentType": "json",
-        "body": "={\"filter\":{\"conjunction\":\"and\",\"conditions\":[{\"field_name\":\"Ma thanh toan\",\"operator\":\"is\",\"value\":[\"{{ $json.code }}\"]},{\"field_name\":\"Trang thai\",\"operator\":\"is\",\"value\":[\"Da thanh toan\"]}]},\"page_size\":1}"
+        "body": "={\"filter\":{\"conjunction\":\"and\",\"conditions\":[{\"field_name\":\"Mã thanh toán\",\"operator\":\"is\",\"value\":[\"{{ $json.code }}\"]},{\"field_name\":\"Trạng thái\",\"operator\":\"contains\",\"value\":[\"Đã thanh toán\"]}]},\"page_size\":1}"
       }
     },
     {
