@@ -822,7 +822,7 @@
               <span>Đang chờ xác nhận thanh toán...</span>
             </div>
             <button class="btn-test-payment" id="btn-simulate" onclick="simulatePayment()">
-              [DEV] Giả lập thanh toán thành công
+              Giả lập thanh toán (kiểm thử)
             </button>
           </div>
 
@@ -880,9 +880,9 @@
     // CONFIG — update webhookUrl before deployment
     // ══════════════════════════════════════════════════
     const CONFIG = {
-      webhookUrl:          'http://localhost:5678/webhook/course-registration',
-      checkPaymentUrl:     'http://localhost:5678/webhook/check-payment',
-      sepayTestWebhookUrl: 'http://localhost:5678/webhook-test/sepay-payment',
+      webhookUrl:      'https://dacphu.app.n8n.cloud/webhook/course-registration',
+      checkPaymentUrl: 'https://dacphu.app.n8n.cloud/webhook/check-payment',
+      sepayWebhookUrl: 'https://dacphu.app.n8n.cloud/webhook-test/sepay-payment',
       bank: {
         code:    'MB',        // ← update to your bank code
         account: '123456789', // ← update to your account number
@@ -1131,8 +1131,8 @@
       document.getElementById('verified-state').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // ── [DEV] Simulate SePay payment ──
-    // Requires: open the SePay workflow in n8n → click "Listen for test event" on the Webhook node
+    // ── Simulate SePay payment (for testing) ──
+    // In n8n: open the SePay workflow → click "Listen for test event" on the Webhook node first
     async function simulatePayment() {
       const btn = document.getElementById('btn-simulate');
       btn.disabled = true;
@@ -1142,7 +1142,7 @@
 
       try {
         // URLSearchParams avoids CORS preflight (simple request)
-        await fetch(CONFIG.sepayTestWebhookUrl, {
+        await fetch(CONFIG.sepayWebhookUrl, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
